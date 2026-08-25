@@ -1,0 +1,352 @@
+/* ===========================================================================
+   tokens.css — the control panel.
+   Change a value here and it propagates everywhere. Nothing else to edit.
+
+   WHERE THE COLOUR COMES FROM
+   This site belongs to someone whose subject is measurement — loss functions,
+   evaluation metrics, confusion matrices. The instrument of that field is the
+   perceptually-uniform colormap: viridis, magma, cividis, the scales built so
+   that equal steps in data are equal steps in perceived colour.
+
+   So the palette is built the way one of those is built. Six hues spaced
+   evenly 60 degrees apart around OKLCH, plus one deliberate near-neutral, and
+   every one of them pinned to the SAME LIGHTNESS — L=0.520 on the light
+   theme, L=0.785 on the dark. Chroma is then clamped to whatever sRGB can
+   actually show at that lightness.
+
+   The point of that constraint is the point of a perceptual colormap: no
+   sample outshouts another. Measured on the light theme the seven families
+   land between 5.11:1 and 5.78:1 — a spread of 0.67 — so no field on this
+   page is louder than any other field. That is a claim about the taxonomy,
+   not a decoration.
+
+   Regenerate with `node assets/css/_palette.mjs`. Do not hand-edit a colour
+   below; change the hue, lightness or chroma constants in that file and run
+   it, or the equal-weight property quietly stops being true.
+
+   THEMES
+   Light values are live in :root. Dark values live once in the `--dk-*` bank
+   at the foot of :root, and two thin blocks map them onto the live names —
+   one for the system preference, one for an explicit choice. The two mapping
+   blocks are deliberately identical text: if they ever drift, a diff shows it
+   immediately. No colour value is ever written twice.
+   =========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* --- Surfaces & ink (light) -------------------------------------------- */
+  --page:       #fbfdfe;   /* the page. Cool, not cream. */
+  --paper-2:    #eff3f6;   /* recessed wells, chart tracks */
+  --card:       #f6f8fa;   /* raised surfaces, rare */
+
+  /* Kept as an alias because the intro panels, the header wash, the veil and
+     the mobile pager fade all still ask for --paper. Grep before removing. */
+  --paper:      var(--page);
+
+  --ink:        #191e28;   /* primary text, 16.4:1 */
+  --ink-2:      #4b505a;   /* body at rest,  7.9:1 */
+  --ink-3:      #6b707a;   /* metadata,      4.9:1 */
+
+  --rule:       #d6d9de;   /* hairlines */
+  --rule-2:     #e7eaed;   /* fainter hairlines */
+
+  /* --- Field colour: the seven families ----------------------------------
+     Bound to what a thing IS, not to where it sits: `Computer vision` is the
+     same teal in Research, in Work and in Skills. The vocabulary — which word
+     lands in which family — is in content/tags.js.
+
+     `systems` is the near-neutral on purpose. It is the fallback, it carries
+     the programming languages, and about a third of every tag on the site is
+     drawn in it. It is what stops six saturated hues reading as confetti.  */
+  --tag-security: #a9433f;   /*  25°  red      — AI / computer security   */
+  --tag-infra:    #896100;   /*  80°  amber    — CUDA, Docker, Linux, Git */
+  --tag-research: #2a7c32;   /* 145°  green    — fields, safety, metrics  */
+  --tag-vision:   #007781;   /* 205°  teal     — vision, detection        */
+  --tag-web:      #4264b6;   /* 265°  blue     — application engineering  */
+  --tag-ml:       #8f4a93;   /* 325°  magenta  — models, training, losses */
+  --tag-systems:  #626975;   /* 262°  neutral  — languages, compilers     */
+
+  /* --- Section accent -----------------------------------------------------
+     ONE HUE WHEEL, USED TWICE. The families above say what something is;
+     these say where you are. Same six hues and the same neutral, so the page
+     never introduces a colour the reader has not already been taught.
+
+     --accent is the single hook every component reads. Sections rebind it for
+     their own subtree in site.css §5, so a section number, a rule, a +, an
+     arrow and a link all pick up that section's identity at once.
+
+     THE PAPER DOES NOT CHANGE between sections. The colour lives in the
+     marks; the ground holds still. */
+  --accent:     var(--accent-research);
+  --accent-2:   #005812;   /* hover — one step down in lightness */
+  --accent-t:   #dfe6df;   /* tint bed for the results rule */
+
+  --accent-profile:    #626975;   /* 262° neutral */
+  --accent-news:       #8f4a93;   /* 325° magenta */
+  --accent-research:   #2a7c32;   /* 145° green   */
+  --accent-work:       #a9433f;   /*  25° red     */
+  --accent-experience: #4264b6;   /* 265° blue    */
+  --accent-education:  #896100;   /*  80° amber   */
+  --accent-skills:     #007781;   /* 205° teal    */
+
+  --focus:      #4264b6;
+
+  /* --- Tag geometry -------------------------------------------------------
+     An editorial label, not a SaaS pill: the radius stays well short of a
+     capsule and the padding is tight enough that a row of tags never
+     outweighs the title above it. --tag-bed and --tag-line are the one dial
+     for "more colour" — everything tinted on the site reads from them.     */
+  --tag-radius:  7px;
+  --tag-pad:     4px 9px;
+  --tag-gap:     7px;
+  --tag-bed:     10%;
+  --tag-line:    58%;
+  --tag-bed-on:  17%;   /* hover */
+  --tag-line-on: 82%;
+
+  /* --- Type ---------------------------------------------------------------
+     ONE FAMILY, FIVE WEIGHTS. Manrope, variable 400..800, and nothing else.
+
+     The three-voice stack it replaced — a grotesque for structure, a serif for
+     reading, a mono for data — is gone by request. Hierarchy now comes from
+     weight and size inside one family, which is a harder discipline and a
+     quieter result:
+
+       400  body, descriptions, bio
+       500  metadata, navigation, tags, contact
+       600  subheadings, item titles
+       700  section titles
+       800  the name, and nothing else
+
+     WHAT WAS TRADED. The mono voice is gone, so labels and tags no longer
+     have the fixed-width texture that separated them from prose at a glance;
+     that job is now done by letter-spacing and by colour. Digits are held in
+     line with `font-variant-numeric: tabular-nums` where they need to align,
+     because Manrope's proportional figures will not do it on their own.
+
+     The three token names are kept and all point at the same stack, so the
+     split is one edit away if the mono is ever missed.                     */
+  --font-display: "Manrope", "Helvetica Neue", Arial, sans-serif;
+  --font-body:    "Manrope", "Helvetica Neue", Arial, sans-serif;
+  --font-mono:    "Manrope", "Helvetica Neue", Arial, sans-serif;
+
+  /* Manrope runs small for its point size, so the body sits at 17px rather
+     than the 16 the serif needed. */
+  --step--2: 0.75rem;    /* 12px — labels, tags, metadata */
+  --step--1: 0.8125rem;  /* 13px — dense metadata */
+  --step-0:  1.0625rem;  /* 17px — body */
+
+  /* CARD BODY. 15px, one notch under the body step, and it is set once on
+     `.row` so everything inside a card inherits it — descriptions, the fields
+     behind the +, bullet points. The title, the metadata line and the tags all
+     name their own size, so none of them move with it.
+
+     Why cards get their own step at all: a card is a summary. At the full body
+     size its description carried the same weight as the running prose in
+     Research and About, so a page of cards read as a page of paragraphs that
+     happened to have borders. A step down is what makes the title the thing
+     you read first. */
+  --step-card: 0.9375rem;   /* 15px — everything inside a card */
+  /* 18px, down from 19. The bio is justified in a 66ch column, and at 19px
+     that column held few enough words per line that a pushed-down long word
+     left visible rivers behind it. A smaller step fits more words per line,
+     which is the actual fix for a river — see the justification note in
+     site.css §2. */
+  --step-1:  1.125rem;   /* 18px — bio, statements */
+
+  /* HEADINGS. Large enough to carry the structure, then pulled back a step:
+     54px section titles were competing with the content rather than framing
+     it. At 1440 these land at 44px and 30px — a clear step between them, and
+     a clear step down from each to the 17px body. */
+  /* Card titles. Pulled back twice now. 26px was still setting a 63-character
+     thesis title over two lines inside its own card and giving every row the
+     visual weight of a heading; 21px keeps the step down from the section
+     title intact and lets a long academic title finish on one line.
+
+     THE PAIR MOVES TOGETHER. --step-3 came down with it — the step between
+     "where am I" and "what is this" is a RATIO, and shrinking only the card
+     title would have widened that gap into a gulf. 32/21 holds the same
+     relationship 44/26 did. */
+  --step-2:  clamp(1.0625rem, 1.35vw, 1.3125rem); /* item and project titles */
+  --step-3:  clamp(1.55rem, 2.3vw, 2rem);         /* section titles */
+  /* The name, and it must hold ONE line — see `white-space: nowrap` on
+     .rail__name. Capped at 32px now rather than 36px, which measures ~235px.
+     If the name in content/site.js ever gets longer, this cap and --rail-w
+     are the two numbers to re-measure TOGETHER — the rail is sized by this
+     value, so lowering one without the other either wraps the name or leaves
+     dead column beside it. */
+  --step-4:  clamp(1.6rem, 2.2vw, 2rem);
+
+  /* THE HERO NAME, and the only thing set at this size. It is the first thing
+     on the page and the one place the site is allowed to be loud — a name at
+     body-adjacent size reads as a label on a document rather than as a person.
+     It replaced --step-4's job when the identity moved out of the rail and
+     into the hero; --step-4 still sizes the opening card. */
+  --step-5:  clamp(2.25rem, 4.4vw, 3.5rem);
+
+  --leading-tight: 1.06;
+  --leading-snug:  1.35;
+  --leading-body:  1.65;
+
+  /* Manrope is a touch wide at display sizes and a touch tight at label sizes;
+     these two corrections are applied everywhere rather than per-component. */
+  --tracking-display: -0.028em;
+  --tracking-mono:     0.1em;    /* the old mono voice, carried by spacing */
+
+  /* PROSE WIDTH. 66ch is the textbook number for a body column, and it was the
+     right one when the reading column was the whole page. It is not the right
+     one here: the column beside the rail is ~1030px at 1440, prose was being
+     set to 620px of it, and the remaining 400px sat empty while every
+     paragraph on the site ran a third longer than it needed to. 74ch is still
+     inside the comfortable range and takes roughly a line off every
+     paragraph — which is a shorter page for free, with no content cut. */
+  --measure: 74ch;        /* prose width */
+
+  /* --- Space -------------------------------------------------------------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 7rem;
+
+  /* --- Layout ------------------------------------------------------------- */
+  /* CONTENT FRAME. 1056px, and the top bar uses the same value — the nav
+     links sit directly above the hero, and every section heading lines up
+     under the first of them. It was 1180 when a 19rem rail ate the left of
+     the window; without the rail that reads as a wide banner rather than as
+     a page. */
+  --frame:  66rem;       /* 1056px — content frame, and the top bar */
+  --gutter: clamp(1.25rem, 5vw, 3.5rem);
+
+  /* How hard the ambient lattice is drawn. The one dial for that layer. */
+  --ambient-k: .75;
+
+  --radius: 3px;         /* a printed page, not an app */
+  --radius-photo: 4px;   /* the portrait */
+
+  /* --- Motion -------------------------------------------------------------
+     One curve, three durations. Everything on the site uses these.         */
+  --ease:   cubic-bezier(0.22, 0.61, 0.36, 1);
+  --t-fast: 150ms;
+  --t-base: 280ms;
+  --t-slow: 700ms;
+
+  /* --- Dark values, defined once ------------------------------------------
+     Not a black page with a bright accent — that look is as much a default as
+     the cream one. The ground is a deep slate-indigo lifted well off black,
+     the same hue family the neutral tag is drawn from, so the dark theme is
+     the light theme's own palette turned down rather than a different site. */
+  --dk-page:       #171b28;
+  --dk-paper-2:    #252938;
+  --dk-card:       #202432;
+  --dk-ink:        #eef0f4;   /* 15.0:1 */
+  --dk-ink-2:      #c8ccd4;   /* 10.7:1 */
+  --dk-ink-3:      #a2a8b2;   /*  7.2:1 */
+  --dk-rule:       #383c4c;
+  --dk-rule-2:     #2a2e3c;
+
+  --dk-tag-security: #ff9890;
+  --dk-tag-infra:    #e4af4d;
+  --dk-tag-research: #81cf84;
+  --dk-tag-vision:   #1fd0e0;
+  --dk-tag-web:      #97b8ff;
+  --dk-tag-ml:       #e39be7;
+  --dk-tag-systems:  #b2b9c6;
+
+  --dk-accent-2:   #afedb0;
+  --dk-accent-t:   #2c3a2e;
+
+  --dk-accent-profile:    #b2b9c6;
+  --dk-accent-news:       #e39be7;
+  --dk-accent-research:   #81cf84;
+  --dk-accent-work:       #ff9890;
+  --dk-accent-experience: #97b8ff;
+  --dk-accent-education:  #e4af4d;
+  --dk-accent-skills:     #1fd0e0;
+
+  --dk-focus:      #97b8ff;
+
+  /* A tinted film reads differently over a dark ground than a light one, so
+     the two dials that govern every tint are turned up a little here. */
+  --dk-tag-bed:     14%;
+  --dk-tag-line:    52%;
+  --dk-tag-bed-on:  22%;
+  --dk-tag-line-on: 78%;
+}
+
+/* --- Dark, by system preference -------------------------------------------
+   `:not([data-theme="light"])` so an explicit light choice still wins.
+   THIS BLOCK AND THE NEXT MUST STAY IDENTICAL apart from their selector. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: var(--dk-page);
+    --paper-2: var(--dk-paper-2);
+    --card: var(--dk-card);
+    --ink: var(--dk-ink);
+    --ink-2: var(--dk-ink-2);
+    --ink-3: var(--dk-ink-3);
+    --rule: var(--dk-rule);
+    --rule-2: var(--dk-rule-2);
+    --tag-security: var(--dk-tag-security);
+    --tag-infra: var(--dk-tag-infra);
+    --tag-research: var(--dk-tag-research);
+    --tag-vision: var(--dk-tag-vision);
+    --tag-web: var(--dk-tag-web);
+    --tag-ml: var(--dk-tag-ml);
+    --tag-systems: var(--dk-tag-systems);
+    --accent-2: var(--dk-accent-2);
+    --accent-t: var(--dk-accent-t);
+    --accent-profile: var(--dk-accent-profile);
+    --accent-news: var(--dk-accent-news);
+    --accent-research: var(--dk-accent-research);
+    --accent-work: var(--dk-accent-work);
+    --accent-experience: var(--dk-accent-experience);
+    --accent-education: var(--dk-accent-education);
+    --accent-skills: var(--dk-accent-skills);
+    --focus: var(--dk-focus);
+    --tag-bed: var(--dk-tag-bed);
+    --tag-line: var(--dk-tag-line);
+    --tag-bed-on: var(--dk-tag-bed-on);
+    --tag-line-on: var(--dk-tag-line-on);
+  }
+}
+
+/* --- Dark, by explicit choice --------------------------------------------- */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: var(--dk-page);
+  --paper-2: var(--dk-paper-2);
+  --card: var(--dk-card);
+  --ink: var(--dk-ink);
+  --ink-2: var(--dk-ink-2);
+  --ink-3: var(--dk-ink-3);
+  --rule: var(--dk-rule);
+  --rule-2: var(--dk-rule-2);
+  --tag-security: var(--dk-tag-security);
+  --tag-infra: var(--dk-tag-infra);
+  --tag-research: var(--dk-tag-research);
+  --tag-vision: var(--dk-tag-vision);
+  --tag-web: var(--dk-tag-web);
+  --tag-ml: var(--dk-tag-ml);
+  --tag-systems: var(--dk-tag-systems);
+  --accent-2: var(--dk-accent-2);
+  --accent-t: var(--dk-accent-t);
+  --accent-profile: var(--dk-accent-profile);
+  --accent-news: var(--dk-accent-news);
+  --accent-research: var(--dk-accent-research);
+  --accent-work: var(--dk-accent-work);
+  --accent-experience: var(--dk-accent-experience);
+  --accent-education: var(--dk-accent-education);
+  --accent-skills: var(--dk-accent-skills);
+  --focus: var(--dk-focus);
+  --tag-bed: var(--dk-tag-bed);
+  --tag-line: var(--dk-tag-line);
+  --tag-bed-on: var(--dk-tag-bed-on);
+  --tag-line-on: var(--dk-tag-line-on);
+}

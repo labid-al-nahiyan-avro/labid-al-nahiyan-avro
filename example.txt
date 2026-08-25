@@ -1,0 +1,5 @@
+Here is some portfolio direct link. And some links are tips and tricks to build portfolio 
+
+https://cheryllao.me/
+https://webflow.com/blog/student-portfolio-examples
+https://github.com/dukechain2333/academic-portfolio

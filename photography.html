@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#fbfdfe" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#171b28" media="(prefers-color-scheme: dark)" />
+
+  <title>Photography — Labid Al Nahiyan</title>
+  <meta name="description" content="Photographs by Labid Al Nahiyan." />
+  <meta name="robots" content="noindex, follow" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&display=swap" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns=&#39;http://www.w3.org/2000/svg&#39;%20viewBox=&#39;0%200%2032%2032&#39;%3E%3Crect%20width=&#39;32&#39;%20height=&#39;32&#39;%20rx=&#39;7&#39;%20fill=&#39;%23171b28&#39;/%3E%3Crect%20x=&#39;7&#39;%20y=&#39;11&#39;%20width=&#39;18&#39;%20height=&#39;3&#39;%20rx=&#39;1.5&#39;%20fill=&#39;%23b2b9c6&#39;/%3E%3Crect%20x=&#39;7&#39;%20y=&#39;18&#39;%20width=&#39;10&#39;%20height=&#39;3&#39;%20rx=&#39;1.5&#39;%20fill=&#39;%2381cf84&#39;/%3E%3C/svg%3E" />
+
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/site.css" />
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      /* Same before-paint theme restore as index.html — see the long note
+         there. Both pages read the same `labid-theme` key. */
+      try {
+        var saved = localStorage.getItem("labid-theme");
+        if (saved === "dark" || saved === "light") root.setAttribute("data-theme", saved);
+      } catch (e) {}
+      /* `photo` restores ordinary page scrolling: the deck model on the
+         homepage locks the page height, this page does not use it. */
+      root.classList.add("js", "intro-done", "photo");
+      /* Arriving here counts as having seen the opening card, so going back
+         to the homepage does not replay it. */
+      try { sessionStorage.setItem("intro-seen", "1"); } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <main id="main" class="photo-page" data-photo>
+    <noscript>
+      <div class="frame">
+        <p class="lede">
+          This gallery builds itself with JavaScript.
+          <a class="link" href="index.html">Back to the portfolio</a>.
+        </p>
+      </div>
+    </noscript>
+  </main>
+
+  <script type="module" src="assets/js/photo.js"></script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#fbfdfe" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#171b28" media="(prefers-color-scheme: dark)" />
+
+  <!-- Both are replaced at runtime from content/site.js; these are what a
+       crawler sees before scripts run. -->
+  <title>Labid Al Nahiyan — ML / AI researcher </title>
+  <meta name="description" content="Labid Al Nahiyan works on the security and reliability of machine learning systems — biometric matching and LLM evaluation. Author on an IEEE DSAA 2026 paper. Applying for Fall 2027 PhD positions." />
+
+  <meta property="og:type" content="profile" />
+  <meta property="og:title" content="Labid Al Nahiyan — ML / AI researcher" />
+  <meta property="og:description" content="Security and reliability of machine learning systems — biometric matching and LLM evaluation. Author on an IEEE DSAA 2026 paper. Applying for Fall 2027 PhD positions." />
+
+  <!-- One family, five weights — see the note in tokens.css. Manrope is
+       variable 400..800, so this is a single file and hierarchy comes from
+       weight and size rather than from mixing typefaces. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&display=swap" />
+
+  <!-- Two bars of different length: the site's own mark, and its argument. -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns=&#39;http://www.w3.org/2000/svg&#39;%20viewBox=&#39;0%200%2032%2032&#39;%3E%3Crect%20width=&#39;32&#39;%20height=&#39;32&#39;%20rx=&#39;7&#39;%20fill=&#39;%23171b28&#39;/%3E%3Crect%20x=&#39;7&#39;%20y=&#39;11&#39;%20width=&#39;18&#39;%20height=&#39;3&#39;%20rx=&#39;1.5&#39;%20fill=&#39;%23b2b9c6&#39;/%3E%3Crect%20x=&#39;7&#39;%20y=&#39;18&#39;%20width=&#39;10&#39;%20height=&#39;3&#39;%20rx=&#39;1.5&#39;%20fill=&#39;%2381cf84&#39;/%3E%3C/svg%3E" />
+
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/site.css" />
+
+  <script>
+    /* Runs before first paint.
+
+       `js` switches on the scroll-reveal system — without it the page is
+       simply visible. `intro-done` keeps the opening from replaying on a
+       refresh or a return visit within the same session; because it is set
+       here, in <head>, the layer is `display: none` before it is ever parsed,
+       so a repeat visit shows no flash of it.
+
+       The timer is the failsafe. The opening runs on CSS animations that
+       start at first paint and finish at ~1.2s; 2s is comfortably past that,
+       and it fires whatever happened to the module. The portfolio must always
+       become usable. */
+    (function () {
+      var root = document.documentElement;
+      root.classList.add("js");
+
+      /* MUST MATCH `intro.enabled` IN content/site.js. There is a test that
+         fails if these two disagree, because the duplication is otherwise a
+         trap.
+
+         Why it is duplicated at all: the opening has to be in the HTML to
+         paint at first frame rather than waiting for a module, and this
+         script runs before any module has been parsed — so it cannot ask
+         content/site.js. Without the flag here, switching the opening off
+         still paints the panels for ~44ms before the module removes them,
+         which is a flash of a blank page. Measured. */
+      var INTRO_ENABLED = false;
+      if (!INTRO_ENABLED) root.classList.add("intro-done");
+
+      /* THEME, AND WHY IT IS HERE RATHER THAN IN A MODULE.
+         A saved choice has to be on <html> before the first paint, or the
+         page paints light and then snaps to dark — the flash every themed
+         site gets wrong. A module cannot do it: it is deferred by definition.
+         With nothing saved the attribute stays off and the stylesheet follows
+         prefers-color-scheme on its own. */
+      try {
+        var saved = localStorage.getItem("labid-theme");
+        if (saved === "dark" || saved === "light") root.setAttribute("data-theme", saved);
+      } catch (e) {}
+
+      try {
+        if (sessionStorage.getItem("labid-intro-seen") === "true" && !/[?&]intro\b/.test(location.search)) root.classList.add("intro-done");
+      } catch (e) {}
+      setTimeout(function () { root.classList.add("intro-done"); }, 2000);
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- The opening. Two ivory panels cover the viewport; the identity sits on
+       top of them; then the panels part and the portfolio is already there
+       underneath, fully rendered.
+
+       `data-state="play"` is written here, not set by script. The whole
+       sequence is CSS animations, so it starts at first paint rather than
+       waiting for a module to download and execute — which is what used to
+       push a ~1.2s opening out past two seconds. JavaScript only clears the
+       layer away afterwards, and if it never arrives the panels still part
+       and the head failsafe removes the layer. -->
+  <div class="intro" data-intro data-state="play" aria-hidden="true">
+    <div class="intro__panel intro__panel--top"></div>
+    <div class="intro__panel intro__panel--bottom"></div>
+    <div class="intro__inner">
+      <p class="intro__label" data-intro-name>Labid Al Nahiyan</p>
+      <p class="intro__roles" data-intro-roles>Software engineer · ML / AI researcher</p>
+      <span class="intro__rule" aria-hidden="true"></span>
+    </div>
+  </div>
+
+  <!-- The ambient ground: one still lattice, disturbed only where the cursor
+       is. Purely decorative — pointer-events none, aria-hidden, drawn at half
+       strength, hidden until the opening has finished, and switched off
+       entirely unless content/site.js says otherwise. -->
+  <div class="ambient" data-ambient aria-hidden="true">
+    <canvas class="ambient__field" data-ambient-field></canvas>
+  </div>
+
+  <!-- PAGE SHELL.
+       A sticky bar across the top and one reading column under it. The fixed
+       identity rail this replaced put the portrait, the contacts and the whole
+       navigation permanently down the left — which worked, and which was asked
+       to go: it is a layout almost nothing else in academia uses, and the page
+       it framed had to live in the 70% left over. The identity now sits in the
+       hero at full size, where a reader meets it once and does not need it
+       held on screen afterwards. -->
+  <header class="topbar" data-topbar></header>
+
+  <main id="main" class="flow" data-flow>
+    <noscript>
+      <div class="frame" style="padding-block: 4rem 3rem; max-width: 46rem">
+        <h1 class="hero__name" style="font-size: 2.5rem">Labid Al Nahiyan</h1>
+        <p style="margin-top: 1.5rem; color: var(--ink-2)">
+          ML / AI researcher. I work on the security and reliability of machine
+          learning systems — biometric matching and LLM evaluation. Applying for
+          Fall 2027 PhD positions in AI security and applied vision.
+        </p>
+        <p style="margin-top: 1.5rem; color: var(--ink-2)">
+          This page builds itself with JavaScript. With it switched off, reach me at
+          <a class="link" href="mailto:labid.nahiyan12@gmail.com">labid.nahiyan12@gmail.com</a>,
+          read &ldquo;How Semantically Stable Are LLM Refusals?&rdquo; (IEEE DSAA 2026) at
+          <a class="link" href="https://arxiv.org/abs/2512.01037">arXiv:2512.01037</a>,
+          or download the <a class="link" href="assets/cv.pdf">CV</a>.
+        </p>
+      </div>
+    </noscript>
+  </main>
+
+  <script type="module" src="assets/js/main.js"></script>
+</body>
+</html>
